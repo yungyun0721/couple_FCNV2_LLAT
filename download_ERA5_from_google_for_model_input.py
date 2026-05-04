@@ -4,7 +4,7 @@ import xarray as xr
 import argparse
 gcs = gcsfs.GCSFileSystem(token='anon')
 era5_path = 'gs://gcp-public-data-arco-era5/ar/full_37-1h-0p25deg-chunk-1.zarr-v3'
-full_era5 = xr.open_zarr(gcs.get_mapper(era5_path), chunks=None)
+full_era5 = xr.open_zarr(gcs.get_mapper(era5_path), chunks=None,consolidated=True)
 
 
 def q_to_rh(q, T_K, p):

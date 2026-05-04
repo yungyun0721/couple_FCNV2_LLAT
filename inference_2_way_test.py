@@ -10,7 +10,7 @@ from regional_model.DLAMPty.DLAMPty_inference import DLAMPty_model
 from interaction_tools.FCNV2_DLAMPty_interaction import transfer_FCNV2_DLAMPty_with_radius
 
 def main(FCNV2_IC_path, LLAT_IC_path, IC_time, save_folder, fore_hour=72,
-         FCNV2_weight="/wk2/yungyun/code_space/FCNV2_test/weight",FCNV2_device='cuda',
+         FCNV2_weight="global_model/FCNV2/weight",FCNV2_device='cuda',
          LLAT_yaml = "regional_model/DLAMPty/onnx/v57_5d.yaml", LLAT_device='cpu'):    
     
     # save FCNV2 small domain
@@ -103,7 +103,13 @@ if __name__ == '__main__':
     parser.add_argument('--IC_time',  required=True, help='Initial time for IC data (ex: 2026041300)')
     parser.add_argument('--save_folder',  required=True, help='Folder to save results')
     parser.add_argument('--fore_hour',  default=72, help='Forecast hours')
+    parser.add_argument('--FCNV2_weight',  default="global_model/FCNV2/weight", help='Path to FCNV2 weight file')
+    parser.add_argument('--FCNV2_device',  default='cuda', help='Device for FCNV2 model')
+    parser.add_argument('--LLAT_yaml',  default="regional_model/DLAMPty/onnx/v57_5d.yaml", help='Path to LLAT YAML config file')
+    parser.add_argument('--LLAT_device',  default='cpu', help='Device for LLAT model')
     args = parser.parse_args()  
     
-    main(args.FCNV2_IC_path, args.LLAT_IC_path, args.IC_time, args.save_folder, fore_hour=args.fore_hour)     
+    main(args.FCNV2_IC_path, args.LLAT_IC_path, args.IC_time, args.save_folder, fore_hour=args.fore_hour, 
+         FCNV2_weight=args.FCNV2_weight, FCNV2_device=args.FCNV2_device, 
+         LLAT_yaml=args.LLAT_yaml, LLAT_device=args.LLAT_device)     
 
