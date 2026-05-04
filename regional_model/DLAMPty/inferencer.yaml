@@ -1,0 +1,53 @@
+# model
+model_config: onnx/v59_10d.yaml
+
+# output_path: "path_to_save_model_output" # auto decided if not provided
+
+# dataset
+dataset_path: "/wk2/Transfer/202019W_2020101618_15kt_combined.nc"
+# forecast_input: /nwpr/wfc/com136/data/sstfillc_ERA5_TC_plus/2019/201901W/201901W_2019011118_15kt_combined.nc
+combined_nc_input: True
+plugin_additional_vars: False
+
+start_year: 2020
+end_year: 2021
+
+# hindcast if t0_only is False
+# t0_only: True
+t0_only: False
+
+# fix_inference_steps can be False or a positive int, need to be an int if forecasting
+# fix_inference_steps: 120
+fix_inference_steps: False
+
+# replace_bdry need to be False if forecasting
+replace_bdry: True
+# replace_bdry: False
+
+# get correct landmask etc. for every step
+recalc_additions: True
+
+# fix boundary conditions with initial data
+replace_w_init_bdry: False
+# dont_replace: bool | dict[str, list[str]] = False
+
+dont_replace: 
+  # "upper": ["u", "v", "w", "z"]
+  # "surface": ["u10", "v10", "msl"]
+  "dims": "always means lon and lat if dims exists in keys"
+
+fix_location: False
+uniformize_lonlat: True
+specify_resolution: 0.25
+# specify_resolution: bool | float | tuple[float, float] = False
+plain_lat: False
+# True: auto mode, set all lat values to it's mean before entering the next step
+# plain_lat: bool | float = True
+# float: set all lat values to this value
+# plain_lat: bool | float = 5.0
+
+# Change these accordingly
+skip: False
+skip_till: "202010W"
+stop_early: False
+last_case: "202026W_2020122512"

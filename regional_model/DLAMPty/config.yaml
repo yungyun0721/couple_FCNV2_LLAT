@@ -1,0 +1,200 @@
+# lightning.pytorch==2.4.0
+seed_everything: 2
+ckpt_path: null
+trainer:
+  accelerator: auto
+  strategy: auto
+  devices: auto
+  num_nodes: 1
+  precision: '16-mixed'
+  callbacks: null
+  fast_dev_run: false
+  max_epochs: null
+  min_epochs: null
+  max_steps: 1600000
+  min_steps: null
+  max_time: '08:07:06:05'
+  limit_train_batches: null
+  limit_val_batches: null
+  limit_test_batches: null
+  limit_predict_batches: null
+  overfit_batches: 0.0
+  val_check_interval: null
+  check_val_every_n_epoch: 1
+  num_sanity_val_steps: null
+  log_every_n_steps: 29
+  enable_checkpointing: true
+  enable_progress_bar: false
+  enable_model_summary: true
+  accumulate_grad_batches: 1
+  gradient_clip_val: 2
+  gradient_clip_algorithm: 'norm'
+  # deterministic: true
+  deterministic: 'warn'
+  benchmark: null
+  inference_mode: true
+  use_distributed_sampler: true
+  profiler: null
+  detect_anomaly: false
+  barebones: false
+  plugins: null
+  sync_batchnorm: false
+  reload_dataloaders_every_n_epochs: 100
+  default_root_dir: null
+  # change swt block position bias to relative
+data:
+  n_workers: 4
+  batch_size: 16
+  # pin_memory: true
+  persistent_workers: true
+  # multiprocessing_context: spawn
+  combined_nc_input: true
+  # root_dir: '/nwpr/wfc/com136/data/sstfillc_ERA5_TC_plus'
+  data_tar: '/nwpr/wfc/com136/data/DLAMP.ty.plus.tar'
+  fast_dir: '/dev/shm/DLAMP.ty'
+  stat_mean_file: 'stat_mean.nc'
+  stat_std_file: 'stat_std.nc'
+  train_start: 2007
+  train_end: 2018
+  val_start: 2018
+  val_end: 2020
+  test_start: 2020
+  test_end: 2021
+  upper_variables:
+  - u
+  - v
+  - t
+  - q
+  - z
+  - w
+  # - ws
+  # - vort
+  # - theta_e
+  # - dewpoint
+  surface_variables:
+  - u10
+  - v10
+  - t2m
+  - d2m
+  - msl
+  - sp
+  - tcwv
+  - tp
+  - mtnlwrf
+  - sst_filled
+  # - ws10
+  # - vort10
+  - f
+  - solar
+  - hgt
+  - landmask
+  - diurnal_sin
+  - diurnal_cos
+  - doy_sin
+  - doy_cos
+  ingest_space_info: true # will add `lon` and `lat` as additional variable layers below the surface variables, remember to add `lon` and `lat` to `surface_vars` in the `model` section
+  data_spatial_shape:
+  - 13
+  - 81
+  - 81
+model:
+  data_spatial_shape:
+  - 13
+  - 81
+  - 81
+  pressure_levels:
+  - 50
+  - 100
+  - 150
+  - 200
+  - 250
+  - 300
+  - 400
+  - 500
+  - 600
+  - 700
+  - 850
+  - 925
+  - 1000
+  upper_vars:
+  - u
+  - v
+  - t
+  - q
+  - z
+  - w
+  # - ws  
+  # - vort
+  # - theta_e
+  # - dewpoint
+  surface_vars:
+  - u10
+  - v10
+  - t2m
+  - d2m
+  - msl
+  - sp
+  - tcwv
+  - tp
+  - mtnlwrf
+  - sst_filled
+  # - ws10
+  # - vort10
+  - f
+  - solar
+  - hgt
+  - landmask
+  - diurnal_sin
+  - diurnal_cos
+  - doy_sin
+  - doy_cos
+  # need lon and lat as additional variable layers below the surface variables if ingest_space_info: true
+  - lon
+  - lat
+  # From paper
+  # upper_var_weights:
+  #   u: 0.77
+  #   v: 0.54
+  #   t: 1.50
+  #   q: 0.60
+  #   z: 3.00
+  # From paper
+  # surface_var_weights:
+  #   u10: 0.77
+  #   v10: 0.66
+  #   t2m: 3.00
+  #   msl: 1.50
+  depths:
+  - 2
+  - 6
+  heads:
+  - 6
+  - 12
+  embed_dim: 192
+  patch_shape:
+  - 2
+  - 4
+  - 4
+  window_shape:
+  - 2
+  - 6
+  - 12
+  surface_weight: 0.25
+  optimizer_name: AdamW
+  optimizer_args:
+    lr: 0.0004
+    # weight_decay: 3e-6
+  lr_scheduler_name: cosine
+  lr_scheduler_args:
+    warmup_steps: 1000
+  constant_mask_paths: null
+  # - '/home/gwfrank5/era5_tw/constant_masks/land_mask.npy'
+  # - '/home/gwfrank5/era5_tw/constant_masks/soil_type.npy'
+  # - '/home/gwfrank5/era5_tw/constant_masks/topography.npy'
+  smoothing_kernel_size: null
+  residual: false
+  res_conn_after_smooth: false
+  segmented_smooth: false
+  segmented_smooth_boundary_width: 8
+  
+  

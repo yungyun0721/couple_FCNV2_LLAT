@@ -1,0 +1,43 @@
+name: ty
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - pip
+  - python<3.12
+  - pytorch
+  - torchvision
+  - torchaudio
+  - pytorch-cuda=12.4
+  - lightning
+  - cudnn=9
+  - tensorboard
+  - timm
+  - pysolar
+  - metpy
+  - notebook
+  - ipykernel
+  - ipython
+  - ipywidgets
+  - jupyter
+  - onnx
+  - xarray
+  - bottleneck
+  - netcdf4
+  - tqdm
+  - ffmpeg
+  - cmaps
+  - pandas
+  - matplotlib
+  - matplotlib-inline
+  - contourpy
+  - cartopy
+  - xESMF
+  - line_profiler
+  - pip:
+    - onnxruntime-gpu
+    - torch_tb_profiler
+    - jsonargparse[signatures]>=4.27.7
+    - xarray-regrid[accel]

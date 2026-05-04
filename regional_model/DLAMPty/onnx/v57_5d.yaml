@@ -1,0 +1,17 @@
+onnx_version: v57_5d
+onnx_path: onnx/v57_5d.onnx
+
+upper_vars: ['u', 'v', 't', 'q', 'z', 'w']
+surface_vars: ['u10', 'v10', 't2m', 'd2m', 'msl', 'sp', 'tcwv', 'tp', 'mtnlwrf', 'sst_filled', 'f', 'solar', 'hgt', 'landmask', 'diurnal_sin', 'diurnal_cos', 'doy_sin', 'doy_cos']
+pressure_levels: [50, 100, 150, 200, 250, 300, 400, 500, 600, 700, 850, 925, 1000]
+ingest_space_info: True
+
+upper_units: ["m/s", "m/s", "K", "kg kg**-1", "m**2 s**-2", "Pa s**-1"]
+surface_units: ["m/s", "m/s", "K", "K", "Pa", "Pa", "kg m**-2", "m", 'W m**-2', 'K', '1/s', 'W m**-2', 'm', '1', '1', '1', '1', '1']
+
+stat_mean_file: utils/stat_mean.nc
+stat_std_file: utils/stat_std.nc
+stat_mean_upper_file:
+stat_std_upper_file:
+stat_mean_sfc_file:
+stat_std_sfc_file:

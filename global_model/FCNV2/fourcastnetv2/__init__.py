@@ -1,0 +1,1 @@
+from global_model.FCNV2.fourcastnetv2.sfnonet import FourierNeuralOperatorNet

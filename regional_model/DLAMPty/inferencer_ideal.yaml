@@ -1,0 +1,58 @@
+# model
+# model_config: onnx/v54_last.yaml
+model_config: onnx/v56_6d4h.yaml
+
+# output_path: "v54_ideal" # auto decided if not provided
+output_path: "v56_ideal" # auto decided if not provided
+
+# dataset
+# dataset_path: "/nwpr/wfc/com136/data/sstfillc_ERA5_TC_plus"
+forecast_input: /nwpr/wfc/com135/project/DLAMPtc/exp/data/2019/201909W/201909W_2019080512_70kt_sym_combined.nc
+# forecast_input: /nwpr/wfc/com135/project/DLAMPtc/exp/data/2019/201914W/201914W_2019090706_100kt_sym_combined.nc
+# forecast_input: /nwpr/wfc/com135/project/DLAMPtc/exp/data/2019/201920W/201920W_2019100712_160kt_sym_combined.nc
+# forecast_input: /nwpr/wfc/com136/data/sstfillc_ERA5_TC_plus/2019/201901W/201901W_2019011118_15kt_combined.nc
+combined_nc_input: True
+plugin_additional_vars: False
+
+start_year: 2020
+end_year: 2021
+
+# hindcast if t0_only is False
+t0_only: True
+# t0_only: False
+
+# fix_inference_steps can be False or a positive int, need to be an int if forecasting
+fix_inference_steps: 240
+# fix_inference_steps: False
+
+# replace_bdry need to be False if forecasting
+# replace_bdry: True
+replace_bdry: False
+
+# get correct landmask etc. for every step
+recalc_additions: True
+
+# fix boundary conditions with initial data
+replace_w_init_bdry: True
+# dont_replace: bool | dict[str, list[str]] = False
+
+dont_replace: 
+  "upper": ["z"]
+  "surface": ["msl"]
+  "dims": "always means lon and lat if dims exists in keys"
+
+fix_location: False
+uniformize_lonlat: True
+specify_resolution: 0.25
+# specify_resolution: bool | float | tuple[float, float] = False
+plain_lat: False
+# True: auto mode, set all lat values to it's mean before entering the next step
+# plain_lat: bool | float = True
+# float: set all lat values to this value
+# plain_lat: bool | float = 5.0
+
+# Change these accordingly
+skip: False
+skip_till: "202010W"
+stop_early: False
+last_case: "202026W_2020122512"
