@@ -11,6 +11,9 @@ Its architecture is conceptually similar to Pangu-Weather, but it operates on a 
 
 ![LLAT model structure](demo_figures/LLAT_model_structure.png)
 
+The variables of LLAT model
+
+![dataset](demo_figures/dataset.png)
 ### FCNV2 Model Structure
 
 FourCastNet V2 (FCNV2) is a global data-driven weather prediction model developed by NVIDIA.
