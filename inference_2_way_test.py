@@ -9,6 +9,23 @@ from global_model.FCNV2.FCNV2_inference import FCNV2_model
 from regional_model.DLAMPty.DLAMPty_inference import DLAMPty_model
 from interaction_tools.FCNV2_DLAMPty_interaction import transfer_FCNV2_DLAMPty_with_radius
 
+FCNV2_info = [ "10u",   "10v", "100u", "100v",   "2t",   "sp",  "msl", "tcwv",
+                "u50",  "u100", "u150", "u200", "u250", "u300", "u400", "u500", "u600", "u700", "u850", "u925","u1000",
+                "v50",  "v100", "v150", "v200", "v250", "v300", "v400", "v500", "v600", "v700", "v850", "v925","v1000",
+                "z50",  "z100", "z150", "z200", "z250", "z300", "z400", "z500", "z600", "z700", "z850", "z925","z1000",
+                "t50",  "t100", "t150", "t200", "t250", "t300", "t400", "t500", "t600", "t700", "t850", "t925","t1000",
+                "r50",  "r100", "r150", "r200", "r250", "r300", "r400", "r500", "r600", "r700", "r850", "r925", "r1000"]
+
+LLAT_info = {
+        "model_title": "v57 5d (SG, ra)",
+        "upper_vars": ['u', 'v', 't', 'q', 'z', 'w'],
+        "upper_units": ["m/s", "m/s", "K", "kg kg**-1", "m**2 s**-2", "Pa s**-1"],
+        "surface_vars": ['u10', 'v10', 't2m', 'd2m', 'msl', 'sp', 'tcwv', 'tp', 'mtnlwrf', 'sst_filled', 'f', 'solar', 'hgt', 'landmask', 'diurnal_sin', 'diurnal_cos', 'doy_sin', 'doy_cos'],
+        "surface_units": ["m/s", "m/s", "K", "K", "Pa", "Pa", "kg m**-2", "m", 'W m**-2', 'K', '1/s', 'W m**-2', 'm', '1', '1', '1', '1', '1'],
+        "pressure_levels" : [50, 100, 150, 200, 250, 300, 400, 500, 600, 700, 850, 925, 1000],
+        'coastline_color': 'darkslategray',
+    }
+
 def main(FCNV2_IC_path, LLAT_IC_path, IC_time, save_folder, fore_hour=72,
          FCNV2_weight="global_model/FCNV2/weight",FCNV2_device='cuda',
          LLAT_yaml = "regional_model/DLAMPty/onnx/v57_5d.yaml", LLAT_device='cpu'):    

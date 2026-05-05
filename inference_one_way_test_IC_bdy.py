@@ -30,6 +30,10 @@ def main(FCNV2_IC_path, LLAT_IC_path, IC_time, save_folder, fore_hour=72,
          FCNV2_weight="global_model/FCNV2/weight",FCNV2_device='cuda',
          LLAT_yaml = "regional_model/DLAMPty/onnx/v57_5d.yaml", LLAT_device='cpu'):    
     
+    # replace vars
+    upper_vars = ['u', 'v', 't', 'q', 'z']    
+    surface_vars = ['u10', 'v10', 't2m', 'msl', 'sp', 'tcwv']
+
     # save FCNV2 small domain
     initial_time = datetime.datetime.strptime(str(IC_time), "%Y%m%d%H")
     lat = np.flip(np.linspace(-90,90,721))
@@ -97,15 +101,27 @@ def main(FCNV2_IC_path, LLAT_IC_path, IC_time, save_folder, fore_hour=72,
         np.save(os.path.join(LLAT_save_path, f"output_sfc_{(fore_i*6):0>3}h"),LLAT_output_surface)
         LLAT_input_upper, LLAT_input_surface = LLAT.changing_additional_information(LLAT_output_upper, LLAT_output_surface,target_time)
         
-        # one-way interaction
-        _, LLAT_input_upper, LLAT_input_surface = transfer_FCNV2_DLAMPty_with_radius(
-            FCNV2_input, 
-            LLAT_input_upper, 
-            LLAT_input_surface,
-            LLAT.model_setting,
-            radius=7.5)
-            
 
+        #load initial bdy
+        LLAT_bdy_path = LLAT_IC_path
+        # DLAMPty_bdy_path = f'/wk2/yungyun/FCNV2_TC_JTWC/{TC_ID}/ERA5/for_DLAMPty/{TC_ID}_{target_time.strftime("%Y%m%d%H")}_combined.nc'
+        # DLAMPty_bdy_path = f'/wk2/pc/AI_models/RegionalCouple_AI/ERA5_DLANPty/{TC_ID}/{TC_ID}_{target_time.strftime("%Y%m%d%H")}_combined.nc'
+        LLAT_bdy = xr.open_dataset(LLAT_bdy_path)
+        LLAT_bdy_upper,LLAT_bdy_surface = LLAT.IC_from_xarray_to_npy(LLAT_bdy)
+
+        # change bdy
+        for var in upper_vars:
+            LLAT_input_upper[:,:8,:,LLAT.model_setting['upper_vars'].index(var)] = LLAT_bdy_upper[:,:8,:,LLAT.model_setting['upper_vars'].index(var)] 
+            LLAT_input_upper[:,-8:,:,LLAT.model_setting['upper_vars'].index(var)] = LLAT_bdy_upper[:,-8:,:,LLAT.model_setting['upper_vars'].index(var)] 
+            LLAT_input_upper[:,:,:8,LLAT.model_setting['upper_vars'].index(var)] = LLAT_bdy_upper[:,:,:8,LLAT.model_setting['upper_vars'].index(var)] 
+            LLAT_input_upper[:,:,-8:,LLAT.model_setting['upper_vars'].index(var)] = LLAT_bdy_upper[:,:,-8:,LLAT.model_setting['upper_vars'].index(var)]
+        
+        for var in surface_vars:            
+            LLAT_input_surface[:8,:,LLAT.model_setting['surface_vars'].index(var)] = LLAT_bdy_surface[:8,:,LLAT.model_setting['surface_vars'].index(var)] 
+            LLAT_input_surface[-8:,:,LLAT.model_setting['surface_vars'].index(var)] = LLAT_bdy_surface[-8:,:,LLAT.model_setting['surface_vars'].index(var)] 
+            LLAT_input_surface[:,:8,LLAT.model_setting['surface_vars'].index(var)] = LLAT_bdy_surface[:,:8,LLAT.model_setting['surface_vars'].index(var)] 
+            LLAT_input_surface[:,-8:,LLAT.model_setting['surface_vars'].index(var)] = LLAT_bdy_surface[:,-8:,LLAT.model_setting['surface_vars'].index(var)] 
+            
         if np.mod(fore_i,4)==0:
             with open(f"log.txt", "a") as f:
                 print(f'finish IC {initial_time.strftime("%Y%m%d%H")} : forecast {(fore_i*6):0>3} hr {target_time.strftime("%Y%m%d%H")}',file=f)
@@ -115,17 +131,9 @@ def main(FCNV2_IC_path, LLAT_IC_path, IC_time, save_folder, fore_hour=72,
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     # Define arguments to get YAML config file.
-    parser.add_argument('--FCNV2_IC_path',  required=True, help='Path to FCNV2 IC data')
-    parser.add_argument('--LLAT_IC_path',  required=True, help='Path to LLAT IC data')
-    parser.add_argument('--IC_time',  required=True, help='Initial time for IC data (ex: 2026041300)')
-    parser.add_argument('--save_folder',  required=True, help='Folder to save results')
-    parser.add_argument('--fore_hour',  default=72, help='Forecast hours')
-    parser.add_argument('--FCNV2_weight',  default="global_model/FCNV2/weight", help='Path to FCNV2 weight file')
-    parser.add_argument('--FCNV2_device',  default='cuda', help='Device for FCNV2 model')
-    parser.add_argument('--LLAT_yaml',  default="regional_model/DLAMPty/onnx/v57_5d.yaml", help='Path to LLAT YAML config file')
-    parser.add_argument('--LLAT_device',  default='cpu', help='Device for LLAT model')
+    parser.add_argument('--TC_ID',  required=True,
+                        help='TC_ID for TC_list (.csv)')
     args = parser.parse_args()  
     
-    main(args.FCNV2_IC_path, args.LLAT_IC_path, args.IC_time, args.save_folder, fore_hour=int(args.fore_hour), 
-         FCNV2_weight=args.FCNV2_weight, FCNV2_device=args.FCNV2_device, 
-         LLAT_yaml=args.LLAT_yaml, LLAT_device=args.LLAT_device) 
+    main(str(args.TC_ID))     
+

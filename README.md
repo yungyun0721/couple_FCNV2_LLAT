@@ -112,6 +112,11 @@ python download_ERA5_from_google_for_model_input.py \
     --save-folder input_data
 ```
 
+### supplement
+TC track data
+JTWC: https://rammb-data.cira.colostate.edu/tc_realtime/
+IBTrACS: https://ncics.org/ibtracs/index.php
+
 ### 2. Run one-way or two-way FCNV2–LLAT coupled inference
 
 Required arguments:
