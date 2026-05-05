@@ -109,6 +109,6 @@ if __name__ == '__main__':
     parser.add_argument('--LLAT_device',  default='cpu', help='Device for LLAT model')
     args = parser.parse_args()  
     
-    main(args.FCNV2_IC_path, args.LLAT_IC_path, args.IC_time, args.save_folder, fore_hour=args.fore_hour, 
+    main(args.FCNV2_IC_path, args.LLAT_IC_path, args.IC_time, args.save_folder, fore_hour=int(args.fore_hour), 
          FCNV2_weight=args.FCNV2_weight, FCNV2_device=args.FCNV2_device, 
          LLAT_yaml=args.LLAT_yaml, LLAT_device=args.LLAT_device) 
